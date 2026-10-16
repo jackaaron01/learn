@@ -35,6 +35,4 @@ python3 -m http.server 8000
 
 ### Cloudflare Pages
 
-Cloudflare Pages 连接此仓库，生产分支使用 `main`，根目录留空，Build command 设为 `node scripts/build.mjs`，Build output directory 设为 `dist`。构建脚本只复制静态前端文件；Markdown 文档内容由浏览器直接从 GitHub 获取。仓库中的 [`wrangler.toml`](wrangler.toml) 声明 Pages 项目名和输出目录。
-
-若站点根路径仍返回 404，请在 Cloudflare **Workers & Pages → learn-785 → Deployments** 中确认最新部署成功，并检查部署文件包含 `index.html`。
+Cloudflare Pages 连接此仓库，生产分支使用 `main`，根目录留空，Framework preset 选 `None`，Build command 留空，Build output directory 设为 `/`。这是纯静态前端，不需要构建步骤；网页从 GitHub 读取 Markdown。
