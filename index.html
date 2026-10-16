@@ -19,13 +19,21 @@
           <span class="brand-mark">阅</span>
           <span><strong>阅读</strong><small>PERSONAL LIBRARY</small></span>
         </a>
-        <div class="sidebar-label">文档库 <span id="document-count">—</span></div>
+        <div class="sidebar-label"><strong>文档库</strong><span id="document-count">—</span></div>
         <label class="search-box">
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.8" cy="8.8" r="5.8"></circle><path d="m13.2 13.2 4 4"></path></svg>
           <input id="search" type="search" placeholder="搜索文档" autocomplete="off" />
           <kbd>/</kbd>
         </label>
         <nav id="document-list" class="document-list" aria-label="文档列表"></nav>
+        <div class="theme-picker" aria-label="主题颜色">
+          <span>主题颜色</span>
+          <div class="theme-swatches">
+            <button class="theme-swatch" type="button" data-theme-choice="forest" aria-label="森林绿" title="森林绿"><span></span></button>
+            <button class="theme-swatch" type="button" data-theme-choice="ocean" aria-label="海湾蓝" title="海湾蓝"><span></span></button>
+            <button class="theme-swatch" type="button" data-theme-choice="clay" aria-label="陶土橙" title="陶土橙"><span></span></button>
+          </div>
+        </div>
         <div class="sidebar-foot"><span class="status-dot"></span> 静态文档库 · 持续更新</div>
       </aside>
 
@@ -33,6 +41,7 @@
         <header class="topbar">
           <button class="menu-toggle" id="menu-toggle" type="button" aria-label="打开文档列表" aria-expanded="false">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+            <span>文档</span>
           </button>
           <div class="mobile-brand"><span class="brand-mark">阅</span><strong>阅读</strong></div>
           <div class="breadcrumb"><span>文档库</span><span class="crumb-sep">/</span><strong id="current-title">选择一篇文档</strong></div>
@@ -45,6 +54,11 @@
               <div class="welcome-kicker"><span class="status-dot"></span> PERSONAL READING SPACE</div>
               <h1>把想读的内容，<br /><span>安静地放在这里。</span></h1>
               <p>从左侧选择一篇笔记开始阅读。支持搜索、目录跳转和数学公式显示。</p>
+              <button class="browse-documents" id="browse-documents" type="button">
+                <span class="browse-icon" aria-hidden="true">☷</span>
+                <span class="browse-copy"><strong>浏览全部文档</strong><small><span id="welcome-document-count">正在同步</span> 篇笔记 · 点击打开目录</small></span>
+                <span class="browse-arrow" aria-hidden="true">→</span>
+              </button>
               <div class="welcome-note"><span class="note-icon">＋</span><span>添加 Markdown 文件到 <code>documents/</code><br /><small>提交并推送后，文档会自动出现在这里。</small></span></div>
               <div class="welcome-meta"><span>01</span><span class="meta-line"></span><span>一个轻量的个人文档库</span></div>
             </div>

@@ -9,6 +9,8 @@
   const list = document.querySelector('#document-list');
   const search = document.querySelector('#search');
   const count = document.querySelector('#document-count');
+  const welcomeCount = document.querySelector('#welcome-document-count');
+  const browseDocuments = document.querySelector('#browse-documents');
   const welcome = document.querySelector('#welcome');
   const articleView = document.querySelector('#article-view');
   const markdownBody = document.querySelector('#markdown-body');
@@ -19,13 +21,23 @@
   const sidebar = document.querySelector('#sidebar');
   const backdrop = document.querySelector('#sidebar-backdrop');
   const menuToggle = document.querySelector('#menu-toggle');
+  const themeButtons = [...document.querySelectorAll('[data-theme-choice]')];
   let documents = [];
   let activePath = '';
 
   const closeMenu = () => {
     sidebar.classList.remove('open'); backdrop.classList.remove('show'); menuToggle.setAttribute('aria-expanded', 'false');
   };
-  const safeText = (value) => String(value ?? '');
+  const openMenu = () => {
+    sidebar.classList.add('open'); backdrop.classList.add('show'); menuToggle.setAttribute('aria-expanded', 'true');
+  };
+  const setTheme = (theme) => {
+    const allowed = ['forest', 'ocean', 'clay'];
+    const selected = allowed.includes(theme) ? theme : 'forest';
+    document.body.dataset.theme = selected;
+    themeButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === selected)));
+    try { localStorage.setItem('learn-reader-theme', selected); } catch (_) { /* The theme still works when storage is unavailable. */ }
+  };
   const repoFileUrl = (filePath) => new URL(filePath.split('/').map(encodeURIComponent).join('/'), rawBase);
   const titleFromMarkdown = (markdown, fallback) => {
     const heading = markdown.match(/^#\s+(.+)$/m);
@@ -41,6 +53,7 @@
     const query = filter.trim().toLocaleLowerCase();
     const filtered = documents.filter((doc) => `${doc.title} ${doc.path}`.toLocaleLowerCase().includes(query));
     count.textContent = String(documents.length).padStart(2, '0');
+    welcomeCount.textContent = String(documents.length);
     list.replaceChildren();
     if (!filtered.length) {
       const empty = document.createElement('div'); empty.className = 'empty-list'; empty.textContent = documents.length ? '没有匹配的文档' : '还没有 Markdown 文档'; list.append(empty); return;
@@ -114,7 +127,24 @@
 
   search.addEventListener('input', () => renderList(search.value));
   search.addEventListener('keydown', (event) => { if (event.key === 'Escape') { search.value = ''; renderList(); search.blur(); } });
-  menuToggle.addEventListener('click', () => { const open = sidebar.classList.toggle('open'); backdrop.classList.toggle('show', open); menuToggle.setAttribute('aria-expanded', String(open)); });
+  menuToggle.addEventListener('click', () => sidebar.classList.contains('open') ? closeMenu() : openMenu());
+  browseDocuments.addEventListener('click', () => {
+    if (window.matchMedia('(max-width: 880px)').matches) {
+      openMenu();
+      return;
+    }
+    const firstDocument = list.querySelector('.doc-item');
+    if (firstDocument) {
+      firstDocument.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      firstDocument.focus({ preventScroll: true });
+    } else {
+      search.focus();
+    }
+  });
+  themeButtons.forEach((button) => button.addEventListener('click', () => setTheme(button.dataset.themeChoice)));
+  let savedTheme = 'forest';
+  try { savedTheme = localStorage.getItem('learn-reader-theme') || 'forest'; } catch (_) { /* Use the default palette. */ }
+  setTheme(savedTheme);
   backdrop.addEventListener('click', closeMenu);
   document.addEventListener('keydown', (event) => { if (event.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) { event.preventDefault(); search.focus(); } if (event.key === 'Escape') closeMenu(); });
 
