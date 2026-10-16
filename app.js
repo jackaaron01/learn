@@ -1,8 +1,11 @@
 (() => {
   const repository = 'jackaaron01/learn';
   const branch = 'main';
+  // jsDelivr's package index exposes the public repository file list without
+  // consuming GitHub's low, shared unauthenticated API quota.
+  const indexUrl = `https://data.jsdelivr.com/v1/packages/gh/${repository}@${branch}?structure=flat`;
   const treeUrl = `https://api.github.com/repos/${repository}/git/trees/${branch}?recursive=1`;
-  const rawBase = `https://raw.githubusercontent.com/${repository}/${branch}/`;
+  const rawBase = `https://cdn.jsdelivr.net/gh/${repository}@${branch}/`;
   const list = document.querySelector('#document-list');
   const search = document.querySelector('#search');
   const count = document.querySelector('#document-count');
@@ -73,7 +76,7 @@
         const href = link.getAttribute('href') || '';
         if (!href || /^(?:[a-z]+:|\/\/|#)/i.test(href)) return;
         const resolved = new URL(href, rawDocumentUrl);
-        const pathMarker = `/${branch}/`;
+        const pathMarker = `${repository}@${branch}/`;
         const markerIndex = resolved.pathname.indexOf(pathMarker);
         const repositoryPath = markerIndex >= 0 ? decodeURIComponent(resolved.pathname.slice(markerIndex + pathMarker.length)) : '';
         if (repositoryPath.toLowerCase().endsWith('.md')) {
@@ -115,27 +118,63 @@
   backdrop.addEventListener('click', closeMenu);
   document.addEventListener('keydown', (event) => { if (event.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) { event.preventDefault(); search.focus(); } if (event.key === 'Escape') closeMenu(); });
 
-  fetch(treeUrl, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
-  })
-    .then((response) => { if (!response.ok) throw new Error('文档索引载入失败'); return response.json(); })
-    .then((data) => {
-      documents = (data.tree || [])
-        .filter((item) => item.type === 'blob' && /^documents\/.+\.md$/i.test(item.path))
-        .map((item) => {
-          const path = item.path.slice('documents/'.length);
-          return { path, title: path.split('/').pop().replace(/\.md$/i, ''), date: '' };
+  function showIndexError(error) {
+    list.replaceChildren();
+    const message = document.createElement('div');
+    message.className = 'empty-list';
+    message.textContent = `文档目录暂时无法载入（${error.message}）。请检查网络后重试。`;
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.className = 'doc-item';
+    retry.textContent = '重新载入';
+    retry.addEventListener('click', loadDocuments);
+    list.append(message, retry);
+  }
+
+  async function loadDocuments() {
+    list.replaceChildren();
+    const loading = document.createElement('div');
+    loading.className = 'empty-list';
+    loading.textContent = '正在读取文档目录…';
+    list.append(loading);
+
+    try {
+      let filePaths;
+      try {
+        const response = await fetch(indexUrl, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`CDN 索引返回 ${response.status}`);
+        const data = await response.json();
+        if (!Array.isArray(data.files)) throw new Error('CDN 索引格式无效');
+        filePaths = data.files.map((file) => file.name.replace(/^\//, ''));
+      } catch (_) {
+        // Keep a secondary source in case the CDN index is unavailable.
+        const response = await fetch(treeUrl, {
+          headers: {
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+          },
+        });
+        if (!response.ok) throw new Error(`索引服务返回 ${response.status}`);
+        const data = await response.json();
+        filePaths = (data.tree || []).filter((item) => item.type === 'blob').map((item) => item.path);
+      }
+
+      documents = filePaths
+        .filter((path) => /^documents\/.+\.md$/i.test(path))
+        .map((path) => {
+          const relativePath = path.slice('documents/'.length);
+          return { path: relativePath, title: relativePath.split('/').pop().replace(/\.md$/i, ''), date: '' };
         })
         .sort((a, b) => a.path.localeCompare(b.path, 'zh-CN'));
-      renderList();
-      const hashPath = decodeURIComponent(location.hash.slice(1).split('&')[0]);
+      renderList(search.value);
+      let hashPath = '';
+      try { hashPath = decodeURIComponent(location.hash.slice(1).split('&')[0]); } catch (_) { /* Ignore malformed URLs. */ }
       const initial = documents.find((doc) => doc.path === hashPath);
       if (initial) openDocument(initial, false);
-    })
-    .catch(() => {
-      list.innerHTML = '<div class="empty-list">无法读取 GitHub 文档目录。请确认仓库公开，并检查网络连接后刷新。</div>';
-    });
+    } catch (error) {
+      showIndexError(error);
+    }
+  }
+
+  loadDocuments();
 })();

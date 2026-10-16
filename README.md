@@ -6,7 +6,7 @@
 
 ## 添加文档
 
-把 `.md` 文件放进仓库的 [`documents/`](documents/) 目录，可继续按子目录分类。提交并推送到 `main` 后，阅读器会从 GitHub 读取最新目录和文档内容。
+把 `.md` 文件放进仓库的 [`documents/`](documents/) 目录，可继续按子目录分类。提交并推送到 `main` 后，阅读器会自动发现新文档并读取内容。目录和正文通过 jsDelivr 从 GitHub 仓库加载，避免依赖额度有限的 GitHub REST API。
 
 ```bash
 cp /path/to/your-note.md documents/
@@ -31,8 +31,8 @@ python3 -m http.server 8000
 
 ### GitHub Pages
 
-在仓库 **Settings → Pages** 中选择从 `main` 分支的 `/(root)` 发布。根目录的 `index.html` 是完整站点入口，无需构建。
+仓库包含 GitHub Actions 发布工作流。首次启用时，在 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**；之后推送到 `main` 会自动发布根目录静态页面。首次设置完成并等待工作流成功后，GitHub Pages 地址才会可用。
 
 ### Cloudflare Pages
 
-Cloudflare Pages 连接此仓库，生产分支使用 `main`，根目录留空，Framework preset 选 `None`，Build command 留空，Build output directory 设为 `/`。这是纯静态前端，不需要构建步骤；网页从 GitHub 读取 Markdown。
+Cloudflare Pages 连接此仓库，生产分支使用 `main`，根目录留空，Framework preset 选 `None`，Build command 留空，Build output directory 设为 `/`。这是纯静态前端，不需要构建步骤；网页和 Markdown 均由浏览器端从仓库/CDN 加载。
