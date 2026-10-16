@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f8f9f7" />
+    <meta name="description" content="一个简洁、适配手机和电脑的 Markdown 阅读站。" />
+    <link rel="canonical" href="https://learn-785.pages.dev/" />
+    <meta property="og:url" content="https://learn-785.pages.dev/" />
+    <title>阅读 · Aaron 的笔记</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./overrides.css" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="文档导航">
+        <a class="brand" href="./" aria-label="返回文档列表">
+          <span class="brand-mark">阅</span>
+          <span><strong>阅读</strong><small>PERSONAL LIBRARY</small></span>
+        </a>
+        <div class="sidebar-label">文档库 <span id="document-count">—</span></div>
+        <label class="search-box">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.8" cy="8.8" r="5.8"></circle><path d="m13.2 13.2 4 4"></path></svg>
+          <input id="search" type="search" placeholder="搜索文档" autocomplete="off" />
+          <kbd>/</kbd>
+        </label>
+        <nav id="document-list" class="document-list" aria-label="文档列表"></nav>
+        <div class="sidebar-foot"><span class="status-dot"></span> 静态文档库 · 持续更新</div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="打开文档列表" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+          </button>
+          <div class="mobile-brand"><span class="brand-mark">阅</span><strong>阅读</strong></div>
+          <div class="breadcrumb"><span>文档库</span><span class="crumb-sep">/</span><strong id="current-title">选择一篇文档</strong></div>
+          <a class="top-link" href="https://github.com/jackaaron01/learn" target="_blank" rel="noreferrer">GitHub 仓库 <span aria-hidden="true">↗</span></a>
+        </header>
+
+        <section class="reader-layout">
+          <article class="reader" id="reader" aria-live="polite">
+            <div class="welcome" id="welcome">
+              <div class="welcome-kicker"><span class="status-dot"></span> PERSONAL READING SPACE</div>
+              <h1>把想读的内容，<br /><span>安静地放在这里。</span></h1>
+              <p>从左侧选择一篇笔记开始阅读。支持搜索、目录跳转和数学公式显示。</p>
+              <div class="welcome-note"><span class="note-icon">＋</span><span>添加 Markdown 文件到 <code>documents/</code><br /><small>提交并推送后，文档会自动出现在这里。</small></span></div>
+              <div class="welcome-meta"><span>01</span><span class="meta-line"></span><span>一个轻量的个人文档库</span></div>
+            </div>
+            <div class="article-view" id="article-view" hidden>
+              <div class="article-meta"><span class="article-tag">NOTE</span><span id="article-reading-time"></span></div>
+              <div class="markdown-body" id="markdown-body"></div>
+              <footer class="article-footer"><span>—</span><span>笔记到此结束</span></footer>
+            </div>
+            <div class="error-state" id="error-state" hidden></div>
+          </article>
+          <aside class="toc-panel" id="toc-panel" aria-label="本文目录" hidden>
+            <div class="toc-title">本文目录</div>
+            <nav id="toc"></nav>
+          </aside>
+        </section>
+        <footer class="page-foot"><span>轻阅读 · 慢思考</span><a href="https://learn-785.pages.dev/" target="_blank" rel="noreferrer">learn-785.pages.dev ↗</a></footer>
+      </main>
+    </div>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <script>
+      window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }, options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
