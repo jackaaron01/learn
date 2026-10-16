@@ -2,8 +2,8 @@
   const themeButtons = [...document.querySelectorAll('[data-theme-choice]')];
   const modeToggle = document.querySelector('#mode-toggle');
   const modeLabel = document.querySelector('#mode-label');
-  const themes = ['warm', 'ocean', 'apricot', 'lavender'];
-  const legacyThemes = { forest: 'warm', clay: 'apricot', violet: 'lavender' };
+  const themes = ['forest', 'warm', 'ocean', 'apricot', 'lavender', 'white', 'glass'];
+  const legacyThemes = { clay: 'apricot', violet: 'lavender' };
 
   function readPreference(key, fallback) {
     try { return localStorage.getItem(key) || fallback; } catch (_) { return fallback; }
