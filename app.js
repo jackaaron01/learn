@@ -21,7 +21,6 @@
   const sidebar = document.querySelector('#sidebar');
   const backdrop = document.querySelector('#sidebar-backdrop');
   const menuToggle = document.querySelector('#menu-toggle');
-  const themeButtons = [...document.querySelectorAll('[data-theme-choice]')];
   let documents = [];
   let activePath = '';
 
@@ -30,13 +29,6 @@
   };
   const openMenu = () => {
     sidebar.classList.add('open'); backdrop.classList.add('show'); menuToggle.setAttribute('aria-expanded', 'true');
-  };
-  const setTheme = (theme) => {
-    const allowed = ['forest', 'ocean', 'clay'];
-    const selected = allowed.includes(theme) ? theme : 'forest';
-    document.body.dataset.theme = selected;
-    themeButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === selected)));
-    try { localStorage.setItem('learn-reader-theme', selected); } catch (_) { /* The theme still works when storage is unavailable. */ }
   };
   const repoFileUrl = (filePath) => new URL(filePath.split('/').map(encodeURIComponent).join('/'), rawBase);
   const titleFromMarkdown = (markdown, fallback) => {
@@ -141,10 +133,6 @@
       search.focus();
     }
   });
-  themeButtons.forEach((button) => button.addEventListener('click', () => setTheme(button.dataset.themeChoice)));
-  let savedTheme = 'forest';
-  try { savedTheme = localStorage.getItem('learn-reader-theme') || 'forest'; } catch (_) { /* Use the default palette. */ }
-  setTheme(savedTheme);
   backdrop.addEventListener('click', closeMenu);
   document.addEventListener('keydown', (event) => { if (event.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) { event.preventDefault(); search.focus(); } if (event.key === 'Escape') closeMenu(); });
 

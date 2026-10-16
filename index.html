@@ -32,9 +32,10 @@
             <button class="theme-swatch" type="button" data-theme-choice="forest" aria-label="森林绿" title="森林绿"><span></span></button>
             <button class="theme-swatch" type="button" data-theme-choice="ocean" aria-label="海湾蓝" title="海湾蓝"><span></span></button>
             <button class="theme-swatch" type="button" data-theme-choice="clay" aria-label="陶土橙" title="陶土橙"><span></span></button>
+            <button class="theme-swatch" type="button" data-theme-choice="violet" aria-label="暮色紫" title="暮色紫"><span></span></button>
           </div>
         </div>
-        <div class="sidebar-foot"><span class="status-dot"></span> 静态文档库 · 持续更新</div>
+        <div class="sidebar-foot"><span><span class="status-dot"></span>静态文档库 · 持续更新</span><a href="./about.html">使用与推广 ↗</a></div>
       </aside>
 
       <main class="main-area">
@@ -45,6 +46,11 @@
           </button>
           <div class="mobile-brand"><span class="brand-mark">阅</span><strong>阅读</strong></div>
           <div class="breadcrumb"><span>文档库</span><span class="crumb-sep">/</span><strong id="current-title">选择一篇文档</strong></div>
+          <button class="mode-toggle" id="mode-toggle" type="button" aria-label="切换到夜间模式" title="切换到夜间模式">
+            <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8 8.6 8.6 0 1 0 20.2 15.4Z"></path></svg>
+            <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg>
+            <span id="mode-label">夜间</span>
+          </button>
           <a class="top-link" href="https://github.com/jackaaron01/learn" target="_blank" rel="noreferrer">GitHub 仓库 <span aria-hidden="true">↗</span></a>
         </header>
 
@@ -74,7 +80,7 @@
             <nav id="toc"></nav>
           </aside>
         </section>
-        <footer class="page-foot"><span>轻阅读 · 慢思考</span><a href="https://learn-785.pages.dev/" target="_blank" rel="noreferrer">learn-785.pages.dev ↗</a></footer>
+        <footer class="page-foot"><span>轻阅读 · 慢思考</span><span class="page-links"><a href="./about.html">使用与推广</a><a href="https://learn-785.pages.dev/" target="_blank" rel="noreferrer">learn-785.pages.dev ↗</a></span></footer>
       </main>
     </div>
     <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
@@ -85,6 +91,7 @@
       window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }, options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] } };
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="./theme.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

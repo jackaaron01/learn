@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f8f9f7" />
+    <meta name="description" content="了解轻阅读个人 Markdown 文档库：如何阅读、添加笔记、部署和参与改进。" />
+    <link rel="canonical" href="https://learn-785.pages.dev/about.html" />
+    <title>使用与推广 · 轻阅读</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./overrides.css" />
+  </head>
+  <body class="guide-body">
+    <header class="topbar guide-topbar">
+      <a class="guide-brand" href="./"><span class="brand-mark">阅</span><strong>轻阅读</strong></a>
+      <nav class="guide-nav" aria-label="页面导航">
+        <a href="./">阅读器</a>
+        <a class="selected" href="./about.html">使用与推广</a>
+      </nav>
+      <button class="mode-toggle" id="mode-toggle" type="button" aria-label="切换到夜间模式" title="切换到夜间模式">
+        <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8 8.6 8.6 0 1 0 20.2 15.4Z"></path></svg>
+        <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg>
+        <span id="mode-label">夜间</span>
+      </button>
+    </header>
+
+    <main class="guide-main">
+      <section class="guide-hero">
+        <div class="guide-eyebrow"><span class="status-dot"></span>OPEN SOURCE · PERSONAL KNOWLEDGE</div>
+        <h1>让 Markdown 笔记，<br /><span>成为随时可读的网页。</span></h1>
+        <p>轻阅读是一个简洁的个人文档库。把 Markdown 放进 GitHub 仓库，就能在手机、平板和电脑上浏览、搜索与分享。</p>
+        <div class="guide-actions">
+          <a class="guide-primary" href="./">打开在线阅读器 <span aria-hidden="true">↗</span></a>
+          <a class="guide-secondary" href="https://github.com/jackaaron01/learn" target="_blank" rel="noreferrer">查看 GitHub 源码</a>
+        </div>
+        <div class="guide-url"><span>分享地址</span><a href="https://learn-785.pages.dev/">https://learn-785.pages.dev</a></div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="guide-reader-title">
+        <div class="guide-section-heading"><span>01 / 阅读</span><h2 id="guide-reader-title">打开就能读</h2></div>
+        <div class="guide-card-grid">
+          <article class="guide-card"><span class="guide-card-icon">⌕</span><h3>找到笔记</h3><p>打开“文档”目录，按标题选择，或使用搜索框快速筛选。</p></article>
+          <article class="guide-card"><span class="guide-card-icon">☷</span><h3>顺着目录阅读</h3><p>文章会自动生成章节目录，支持 Markdown 表格、代码、图片和数学公式。</p></article>
+          <article class="guide-card"><span class="guide-card-icon">◐</span><h3>按习惯调整</h3><p>切换日间或夜间模式，也可选择不同强调色；选择会保存在当前浏览器。</p></article>
+        </div>
+      </section>
+
+      <section class="guide-section guide-add-section" aria-labelledby="guide-add-title">
+        <div class="guide-section-heading"><span>02 / 添加内容</span><h2 id="guide-add-title">三步发布一篇新笔记</h2></div>
+        <ol class="guide-steps">
+          <li><span>1</span><div><strong>放入文档目录</strong><p>将 <code>.md</code> 文件放进仓库的 <code>documents/</code>，可用子文件夹整理主题。</p></div></li>
+          <li><span>2</span><div><strong>提交并推送</strong><p>推送到 <code>main</code> 分支，阅读器会自动发现新增文档。</p></div></li>
+          <li><span>3</span><div><strong>打开网页阅读</strong><p>部署更新后刷新阅读器；新文章会出现在文档列表中。</p></div></li>
+        </ol>
+        <pre class="guide-code"><code>cp 我的笔记.md documents/&#10;git add documents/&#10;git commit -m "add a note"&#10;git push origin main</code></pre>
+      </section>
+
+      <section class="guide-section guide-promo" aria-labelledby="guide-promo-title">
+        <div class="guide-section-heading"><span>03 / 分享与协作</span><h2 id="guide-promo-title">把知识分享出去</h2></div>
+        <div class="promo-panel">
+          <div><h3>推荐语</h3><p>我在用一个轻量的 Markdown 阅读站整理和分享笔记。支持手机阅读、文档搜索、章节导航、数学公式和夜间模式，内容以 Markdown 管理，开源代码可在 GitHub 查看。</p></div>
+          <a class="share-address" href="https://learn-785.pages.dev/">learn-785.pages.dev ↗</a>
+        </div>
+        <div class="contribute-note"><strong>欢迎一起改进</strong><span>可以 Fork 仓库、提交 Issue 或 Pull Request。使用或再发布前，请先在仓库中确认并补充合适的开源许可证。</span></div>
+      </section>
+
+      <footer class="guide-footer"><a href="./">← 返回阅读器</a><a href="https://github.com/jackaaron01/learn" target="_blank" rel="noreferrer">GitHub 仓库 ↗</a><span>轻阅读 · 慢思考</span></footer>
+    </main>
+    <script src="./theme.js"></script>
+  </body>
+</html>
