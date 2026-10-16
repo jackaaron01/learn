@@ -1,4 +1,8 @@
 (() => {
+  const repository = 'jackaaron01/learn';
+  const branch = 'main';
+  const treeUrl = `https://api.github.com/repos/${repository}/git/trees/${branch}?recursive=1`;
+  const rawBase = `https://raw.githubusercontent.com/${repository}/${branch}/`;
   const list = document.querySelector('#document-list');
   const search = document.querySelector('#search');
   const count = document.querySelector('#document-count');
@@ -19,6 +23,7 @@
     sidebar.classList.remove('open'); backdrop.classList.remove('show'); menuToggle.setAttribute('aria-expanded', 'false');
   };
   const safeText = (value) => String(value ?? '');
+  const repoFileUrl = (filePath) => new URL(filePath.split('/').map(encodeURIComponent).join('/'), rawBase);
   const titleFromMarkdown = (markdown, fallback) => {
     const heading = markdown.match(/^#\s+(.+)$/m);
     return heading ? heading[1].replace(/[*_`]/g, '').trim() : fallback;
@@ -51,7 +56,8 @@
     tocPanel.hidden = true; toc.replaceChildren(); markdownBody.innerHTML = '<p>正在载入文档…</p>'; currentTitle.textContent = doc.title;
     if (updateHash) history.replaceState(null, '', `#${encodeURIComponent(doc.path)}`);
     try {
-      const response = await fetch(new URL(`documents/${doc.path.split('/').map(encodeURIComponent).join('/')}`, document.baseURI));
+      const rawDocumentUrl = repoFileUrl(`documents/${doc.path}`);
+      const response = await fetch(rawDocumentUrl);
       if (!response.ok) throw new Error(`文档读取失败（${response.status}）`);
       const source = await response.text();
       currentTitle.textContent = titleFromMarkdown(source, doc.title);
@@ -59,6 +65,28 @@
       marked.setOptions({ gfm: true, breaks: false, headerIds: false, mangle: false });
       const rendered = marked.parse(source);
       markdownBody.innerHTML = DOMPurify.sanitize(rendered, { USE_PROFILES: { html: true } });
+      markdownBody.querySelectorAll('img[src]').forEach((image) => {
+        const src = image.getAttribute('src') || '';
+        if (src && !/^(?:[a-z]+:|\/\/|#)/i.test(src)) image.src = new URL(src, rawDocumentUrl).href;
+      });
+      markdownBody.querySelectorAll('a[href]').forEach((link) => {
+        const href = link.getAttribute('href') || '';
+        if (!href || /^(?:[a-z]+:|\/\/|#)/i.test(href)) return;
+        const resolved = new URL(href, rawDocumentUrl);
+        const pathMarker = `/${branch}/`;
+        const markerIndex = resolved.pathname.indexOf(pathMarker);
+        const repositoryPath = markerIndex >= 0 ? decodeURIComponent(resolved.pathname.slice(markerIndex + pathMarker.length)) : '';
+        if (repositoryPath.toLowerCase().endsWith('.md')) {
+          const target = documents.find((item) => `documents/${item.path}` === repositoryPath);
+          if (target) {
+            link.addEventListener('click', (event) => { event.preventDefault(); openDocument(target); });
+            return;
+          }
+        }
+        link.href = resolved.href;
+        link.target = '_blank';
+        link.rel = 'noreferrer';
+      });
       const words = source.replace(/```[\s\S]*?```/g, '').trim().split(/\s+/).length;
       document.querySelector('#article-reading-time').textContent = `约 ${Math.max(1, Math.ceil(words / 350))} 分钟阅读`;
       buildToc();
@@ -87,14 +115,27 @@
   backdrop.addEventListener('click', closeMenu);
   document.addEventListener('keydown', (event) => { if (event.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) { event.preventDefault(); search.focus(); } if (event.key === 'Escape') closeMenu(); });
 
-  fetch(new URL('documents.json', document.baseURI))
+  fetch(treeUrl, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  })
     .then((response) => { if (!response.ok) throw new Error('文档索引载入失败'); return response.json(); })
     .then((data) => {
-      documents = Array.isArray(data) ? data : [];
+      documents = (data.tree || [])
+        .filter((item) => item.type === 'blob' && /^documents\/.+\.md$/i.test(item.path))
+        .map((item) => {
+          const path = item.path.slice('documents/'.length);
+          return { path, title: path.split('/').pop().replace(/\.md$/i, ''), date: '' };
+        })
+        .sort((a, b) => a.path.localeCompare(b.path, 'zh-CN'));
       renderList();
       const hashPath = decodeURIComponent(location.hash.slice(1).split('&')[0]);
       const initial = documents.find((doc) => doc.path === hashPath);
       if (initial) openDocument(initial, false);
     })
-    .catch(() => { list.innerHTML = '<div class="empty-list">无法载入文档列表，请检查站点构建结果。</div>'; });
+    .catch(() => {
+      list.innerHTML = '<div class="empty-list">无法读取 GitHub 文档目录。请确认仓库公开，并检查网络连接后刷新。</div>';
+    });
 })();

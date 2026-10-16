@@ -1,14 +1,12 @@
 # 个人 Markdown 阅读站
 
-一个适配手机、平板和桌面浏览器的极简 Markdown 阅读站。当前文档放在 [`documents/`](documents/)；构建时会自动扫描其中所有 `.md` 文件并生成目录。
+纯静态前端阅读器：页面从 GitHub 仓库读取 `documents/` 下的 Markdown 文件，不维护单独的文档清单，也不需要服务端保存文档。
 
-## 在线阅读
-
-[https://learn-785.pages.dev](https://learn-785.pages.dev)
+在线地址：[learn-785.pages.dev](https://learn-785.pages.dev)
 
 ## 添加文档
 
-把 Markdown 文件放进 `documents/`，也可以放进它的子文件夹。提交并推送到 `main` 后，GitHub Actions 会重新构建站点并发布更新。
+把 `.md` 文件放进仓库的 [`documents/`](documents/) 目录，可继续按子目录分类。提交并推送到 `main` 后，阅读器会从 GitHub 读取最新目录和文档内容。
 
 ```bash
 cp /path/to/your-note.md documents/
@@ -17,19 +15,26 @@ git commit -m "add reading notes"
 git push
 ```
 
+仓库需要公开，浏览器才能通过 GitHub API 和 Raw 内容地址读取文档。网页排版、公式和文档列表均在浏览器端完成。
+
 ## 本地预览
 
-需要 Node.js 18 或更新版本：
+在仓库根目录启动任意静态文件服务器，例如：
 
 ```bash
-node scripts/build.mjs
-python3 -m http.server 8000 --directory dist
+python3 -m http.server 8000
 ```
 
-然后打开 `http://localhost:8000`。Markdown 排版和公式组件从 jsDelivr 加载，预览和阅读时需要联网。
+打开 `http://localhost:8000`。Markdown 排版和数学公式依赖 jsDelivr，预览和阅读时需要联网。
 
-## Cloudflare Pages 发布
+## 部署
 
-当前站点地址为 [learn-785.pages.dev](https://learn-785.pages.dev)。仓库中的 [`wrangler.toml`](wrangler.toml) 固定了 Pages 项目名和输出目录。Cloudflare Pages 项目需连接此 GitHub 仓库，生产分支使用 `main`，根目录留空，构建命令设为 `node scripts/build.mjs`。推送到 `main` 后，Cloudflare 会自动重新构建并更新在线站点。
+### GitHub Pages
 
-若根地址仍返回 404，请到 Cloudflare **Workers & Pages → learn-785 → Deployments → View details → Build log** 检查最近一次构建是否生成了 `dist/index.html`。
+在仓库 **Settings → Pages** 中选择从 `main` 分支的 `/(root)` 发布。根目录的 `index.html` 是完整站点入口，无需构建。
+
+### Cloudflare Pages
+
+Cloudflare Pages 连接此仓库，生产分支使用 `main`，根目录留空，Build command 设为 `node scripts/build.mjs`，Build output directory 设为 `dist`。构建脚本只复制静态前端文件；Markdown 文档内容由浏览器直接从 GitHub 获取。仓库中的 [`wrangler.toml`](wrangler.toml) 声明 Pages 项目名和输出目录。
+
+若站点根路径仍返回 404，请在 Cloudflare **Workers & Pages → learn-785 → Deployments** 中确认最新部署成功，并检查部署文件包含 `index.html`。
