@@ -31,7 +31,7 @@ python3 -m http.server 8000
 
 ### GitHub Pages
 
-仓库包含 GitHub Actions 发布工作流。首次启用时，在 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**；之后推送到 `main` 会自动发布根目录静态页面。首次设置完成并等待工作流成功后，GitHub Pages 地址才会可用。
+首次启用时，在仓库 **Settings → Pages → Build and deployment** 中选择 **Deploy from a branch**，分支选 `main`，目录选 `/(root)` 并保存。GitHub Pages 随后会直接发布根目录的 `index.html`，之后推送到 `main` 会自动更新。
 
 ### Cloudflare Pages
 
