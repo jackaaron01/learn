@@ -2,7 +2,7 @@
 
 纯静态前端阅读器：页面从 GitHub 仓库读取 `documents/` 下的 Markdown 文件，不维护单独的文档清单，也不需要服务端保存文档。
 
-在线地址：[learn-785.pages.dev](https://learn-785.pages.dev)
+在线地址：[Cloudflare Pages](https://learn-785.pages.dev) · [GitHub Pages](https://jackaaron01.github.io/learn/)
 
 ## 添加文档
 
