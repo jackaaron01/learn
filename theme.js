@@ -2,14 +2,16 @@
   const themeButtons = [...document.querySelectorAll('[data-theme-choice]')];
   const modeToggle = document.querySelector('#mode-toggle');
   const modeLabel = document.querySelector('#mode-label');
-  const themes = ['forest', 'ocean', 'clay', 'violet'];
+  const themes = ['warm', 'ocean', 'apricot', 'lavender'];
+  const legacyThemes = { forest: 'warm', clay: 'apricot', violet: 'lavender' };
 
   function readPreference(key, fallback) {
     try { return localStorage.getItem(key) || fallback; } catch (_) { return fallback; }
   }
 
   function setTheme(theme) {
-    const selected = themes.includes(theme) ? theme : 'forest';
+    const migrated = legacyThemes[theme] || theme;
+    const selected = themes.includes(migrated) ? migrated : 'warm';
     document.body.dataset.theme = selected;
     themeButtons.forEach((button) => {
       button.setAttribute('aria-pressed', String(button.dataset.themeChoice === selected));
@@ -30,7 +32,7 @@
     try { localStorage.setItem('learn-reader-mode', selected); } catch (_) { /* Keep the selected mode for this page view. */ }
   }
 
-  setTheme(readPreference('learn-reader-theme', 'forest'));
+  setTheme(readPreference('learn-reader-theme', 'warm'));
   setMode(readPreference('learn-reader-mode', 'day'));
   themeButtons.forEach((button) => button.addEventListener('click', () => setTheme(button.dataset.themeChoice)));
   modeToggle?.addEventListener('click', () => {
