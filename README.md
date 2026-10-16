@@ -30,4 +30,6 @@ python3 -m http.server 8000 --directory dist
 
 ## Cloudflare Pages 发布
 
-当前站点地址为 [learn-785.pages.dev](https://learn-785.pages.dev)。Cloudflare Pages 项目连接此 GitHub 仓库后，生产分支使用 `main`，构建命令为 `node scripts/build.mjs`，输出目录为 `dist`。推送到 `main` 后，Cloudflare 会自动重新构建并更新在线站点。
+当前站点地址为 [learn-785.pages.dev](https://learn-785.pages.dev)。仓库中的 [`wrangler.toml`](wrangler.toml) 固定了 Pages 项目名和输出目录。Cloudflare Pages 项目需连接此 GitHub 仓库，生产分支使用 `main`，根目录留空，构建命令设为 `node scripts/build.mjs`。推送到 `main` 后，Cloudflare 会自动重新构建并更新在线站点。
+
+若根地址仍返回 404，请到 Cloudflare **Workers & Pages → learn-785 → Deployments → View details → Build log** 检查最近一次构建是否生成了 `dist/index.html`。
