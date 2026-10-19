@@ -6,7 +6,7 @@
 
 ## 添加文档
 
-把 `.md` 文件放进仓库的 [`documents/`](documents/) 目录，可继续按子目录分类。提交并推送到 `main` 后，阅读器会自动发现新文档并读取内容。目录和正文通过 jsDelivr 从 GitHub 仓库加载，避免依赖额度有限的 GitHub REST API。
+把 `.md` 文件放进仓库的 [`documents/`](documents/) 目录，可用子目录分类。阅读器会直接把文件夹名称作为分类，例如 `documents/机器人/运动学.md` 会显示在“机器人”分类下；根目录中的 Markdown 文件会归入“未分类”。提交并推送到 `main` 后，阅读器会自动发现新文档并读取内容。目录和正文通过 jsDelivr 从 GitHub 仓库加载，避免依赖额度有限的 GitHub REST API。
 
 ```bash
 cp /path/to/your-note.md documents/
